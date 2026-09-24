@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 
-class MovieListing extends StatelessWidget {
+class MovieListing extends StatefulWidget {
   const MovieListing({super.key});
+
+  @override
+  State<MovieListing> createState() => _MovieListingState();
+}
+
+class _MovieListingState extends State<MovieListing> {
+  int tickets = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +36,8 @@ class MovieListing extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                    "A wish comes true for John when his teddy bear, Ted, comes to life."),
+                //Text(
+                //"A wish comes true for John when his teddy bear, Ted, comes to life."),
                 Row(
                   children: const [
                     Text("Southsea Cinema Room"),
@@ -51,13 +58,31 @@ class MovieListing extends StatelessWidget {
                   children: const [Text("Select Quantities (Upto 5 in total)")],
                 ),
                 Row(
-                  children: const [Text("Tickets")],
+                  children: const [
+                    Text("Tickets"),
+                  ],
                 ),
                 Row(
-                  children: const [Text("Adult (£7.50)")],
-                ),
-                Row(
-                  children: const [Text("ADD TO ORDER")],
+                  children: [
+                    DropdownMenu<int>(
+                      initialSelection: 1,
+                      onSelected: (int? value) {
+                        if (value != null) {
+                          setState(() {
+                            tickets = value;
+                          });
+                        }
+                      },
+                      dropdownMenuEntries: [
+                        DropdownMenuEntry(value: 1, label: '1'),
+                        DropdownMenuEntry(value: 2, label: '2'),
+                        DropdownMenuEntry(value: 3, label: '3'),
+                        DropdownMenuEntry(value: 4, label: '4'),
+                        DropdownMenuEntry(value: 5, label: '5'),
+                      ],
+                    ),
+                    Text("Adult (£7.50)"),
+                  ],
                 ),
               ],
             )));
