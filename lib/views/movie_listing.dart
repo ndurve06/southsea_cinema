@@ -20,7 +20,12 @@ class MovieListing extends StatelessWidget {
             color: cinemaBackground,
             child: Row(
               children: [
-                Text("Ted (2012) (15)"),
+                Text(
+                  "Ted (2012) (15)",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
                 Text(
                     "A wish comes true for John when his teddy bear, Ted, comes to life."),
               ],
