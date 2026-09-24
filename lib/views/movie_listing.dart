@@ -36,6 +36,7 @@ class _MovieListingState extends State<MovieListing> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 32),
                 //Text(
                 //"A wish comes true for John when his teddy bear, Ted, comes to life."),
                 Row(
@@ -43,25 +44,30 @@ class _MovieListingState extends State<MovieListing> {
                     Text("Southsea Cinema Room"),
                   ],
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: const [
                     Text("Friday 25 December 2026, 18:00 - ends at 19:14")
                   ],
                 ),
+                const SizedBox(height: 32),
                 Row(
                   children: const [
                     Text("Please note that Discounts / Membership Benefits "),
                     Text("will be applied once you have selected your tickets")
                   ],
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: const [Text("Select Quantities (Upto 5 in total)")],
                 ),
+                const SizedBox(height: 32),
                 Row(
                   children: const [
                     Text("Tickets"),
                   ],
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     DropdownMenu<int>(
@@ -84,6 +90,7 @@ class _MovieListingState extends State<MovieListing> {
                     const Text("Adult (£7.50)"),
                   ],
                 ),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () =>
                       print('$tickets ticket(s) added to your order'),
