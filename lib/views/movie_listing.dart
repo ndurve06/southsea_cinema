@@ -53,8 +53,10 @@ class _MovieListingState extends State<MovieListing> {
                 const SizedBox(height: 32),
                 Row(
                   children: const [
-                    Text("Please note that Discounts / Membership Benefits "),
-                    Text("will be applied once you have selected your tickets")
+                    Text(
+                      "Please note that Discounts / Membership Benefits "
+                      "will be applied once you have selected your tickets",
+                    )
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -64,38 +66,90 @@ class _MovieListingState extends State<MovieListing> {
                 const SizedBox(height: 32),
                 Row(
                   children: const [
-                    Text("Tickets"),
+                    Text(
+                      "Tickets",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    DropdownMenu<int>(
-                      initialSelection: 1,
-                      onSelected: (int? value) {
-                        if (value != null) {
-                          setState(() {
-                            tickets = value;
-                          });
-                        }
-                      },
-                      dropdownMenuEntries: const [
-                        DropdownMenuEntry(value: 1, label: '1'),
-                        DropdownMenuEntry(value: 2, label: '2'),
-                        DropdownMenuEntry(value: 3, label: '3'),
-                        DropdownMenuEntry(value: 4, label: '4'),
-                        DropdownMenuEntry(value: 5, label: '5'),
+                LayoutBuilder(builder: (context, constraints) {
+                  if (constraints.maxWidth > 600) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            DropdownMenu<int>(
+                              initialSelection: 1,
+                              onSelected: (int? value) {
+                                if (value != null) {
+                                  setState(() {
+                                    tickets = value;
+                                  });
+                                }
+                              },
+                              dropdownMenuEntries: const [
+                                DropdownMenuEntry(value: 1, label: '1'),
+                                DropdownMenuEntry(value: 2, label: '2'),
+                                DropdownMenuEntry(value: 3, label: '3'),
+                                DropdownMenuEntry(value: 4, label: '4'),
+                                DropdownMenuEntry(value: 5, label: '5'),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            const Text("Adult (£7.50)"),
+                            SizedBox(width: 10),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () =>
+                              print('$tickets ticket(s) added to your order'),
+                          child: Text("ADD TO ORDER"),
+                        )
                       ],
-                    ),
-                    const Text("Adult (£7.50)"),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () =>
-                      print('$tickets ticket(s) added to your order'),
-                  child: Text("ADD TO ORDER"),
-                )
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            DropdownMenu<int>(
+                              initialSelection: 1,
+                              onSelected: (int? value) {
+                                if (value != null) {
+                                  setState(() {
+                                    tickets = value;
+                                  });
+                                }
+                              },
+                              dropdownMenuEntries: const [
+                                DropdownMenuEntry(value: 1, label: '1'),
+                                DropdownMenuEntry(value: 2, label: '2'),
+                                DropdownMenuEntry(value: 3, label: '3'),
+                                DropdownMenuEntry(value: 4, label: '4'),
+                                DropdownMenuEntry(value: 5, label: '5'),
+                              ],
+                            ),
+                            const SizedBox(width: 10),
+                            const Text("Adult (£7.50)"),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () =>
+                              print('$tickets ticket(s) added to your order'),
+                          child: Text("ADD TO ORDER"),
+                        )
+                      ],
+                    );
+                  }
+                })
               ],
             )));
   }
