@@ -1,7 +1,7 @@
 class Movie {
   final String id;
   final String name;
-  final int year;
+  final String year;
   final String ageRating;
   final String description;
   final double price;
