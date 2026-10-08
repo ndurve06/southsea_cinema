@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
+import 'package:southsea_cinema/models/movie.dart';
 
 class MovieListing extends StatefulWidget {
-  const MovieListing({super.key});
+  final Movie movie;
+
+  const MovieListing({
+    super.key,
+    required this.movie,
+  });
 
   @override
   State<MovieListing> createState() => _MovieListingState();
@@ -39,6 +45,10 @@ class _MovieListingState extends State<MovieListing> {
           isAdded = true;
         });
       },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.lightBlueAccent,
+        foregroundColor: Colors.white,
+      ),
       child: Text(isAdded ? "ADDED" : "ADD TO ORDER"),
     );
 
@@ -58,28 +68,33 @@ class _MovieListingState extends State<MovieListing> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ted (2012) (15)",
+                  '${widget.movie.name} (${widget.movie.year}) (${widget.movie.ageRating})',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 32),
-                //Text(
-                //"A wish comes true for John when his teddy bear, Ted, comes to life."),
+                const SizedBox(height: 16),
+                Image.asset(
+                  widget.movie.imagePath,
+                  width: 110,
+                  height: 165,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 16),
+                Text("Southsea Cinema Room"),
+                const SizedBox(height: 4),
                 Row(
-                  children: const [
-                    Text("Southsea Cinema Room"),
+                  children: const [Text("Friday 25 December 2026, 17:00")],
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(child: Text(widget.movie.description)),
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: const [
-                    Text("Friday 25 December 2026, 18:00 - ends at 19:14")
-                  ],
-                ),
-                const SizedBox(height: 32),
-                Row(
+                /*Row(
                   children: const [
                     Text(
                       "Please note that Discounts / Membership Benefits "
@@ -91,17 +106,7 @@ class _MovieListingState extends State<MovieListing> {
                 Row(
                   children: const [Text("Select Quantities (Upto 5 in total)")],
                 ),
-                const SizedBox(height: 32),
-                Row(
-                  children: const [
-                    Text(
-                      "Tickets",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                const SizedBox(height: 32), */
                 const SizedBox(height: 16),
                 LayoutBuilder(builder: (context, constraints) {
                   if (constraints.maxWidth > 600) {
@@ -111,9 +116,10 @@ class _MovieListingState extends State<MovieListing> {
                         const SizedBox(height: 16),
                         Row(
                           children: [
+                            Text(
+                                "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
+                            SizedBox(width: 100),
                             ticketDropdown,
-                            SizedBox(width: 10),
-                            const Text("Adult (£7.50)"),
                             SizedBox(width: 10),
                           ],
                         ),
@@ -127,9 +133,10 @@ class _MovieListingState extends State<MovieListing> {
                       children: [
                         Row(
                           children: [
+                            Text(
+                                "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
+                            const SizedBox(width: 30),
                             ticketDropdown,
-                            const SizedBox(width: 10),
-                            const Text("Adult (£7.50)"),
                             const SizedBox(width: 10),
                           ],
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/models/movie.dart';
+import 'package:southsea_cinema/views/movie_listing.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;
@@ -75,13 +76,20 @@ class MovieCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Friday 25 December 2026 18:00',
+                    'Friday 25 December 2026 17:00',
                     style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MovieListing(movie: movie),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlueAccent,
                       foregroundColor: Colors.white,
