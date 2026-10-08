@@ -117,7 +117,7 @@ class _MovieListingState extends State<MovieListing> {
                         Row(
                           children: [
                             Text(
-                                "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
+                                "Tickets (£${widget.movie.formattedPrice} each)"),
                             SizedBox(width: 100),
                             ticketDropdown,
                             SizedBox(width: 10),
