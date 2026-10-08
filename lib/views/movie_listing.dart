@@ -11,6 +11,7 @@ class MovieListing extends StatefulWidget {
 
 class _MovieListingState extends State<MovieListing> {
   int tickets = 1;
+  bool isAdded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +107,12 @@ class _MovieListingState extends State<MovieListing> {
                           ],
                         ),
                         ElevatedButton(
-                          onPressed: () =>
-                              print('$tickets ticket(s) added to your order'),
-                          child: Text("ADD TO ORDER"),
+                          onPressed: () {
+                            setState(() {
+                              isAdded = true;
+                            });
+                          },
+                          child: Text(isAdded ? "ADDED" : "ADD TO ORDER"),
                         )
                       ],
                     );
@@ -142,9 +146,12 @@ class _MovieListingState extends State<MovieListing> {
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () =>
-                              print('$tickets ticket(s) added to your order'),
-                          child: Text("ADD TO ORDER"),
+                          onPressed: () {
+                            setState(() {
+                              isAdded = true;
+                            });
+                          },
+                          child: Text(isAdded ? "ADDED" : "ADD TO ORDER"),
                         )
                       ],
                     );
