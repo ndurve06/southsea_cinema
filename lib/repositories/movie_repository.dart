@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:southsea_cinema/models/movie.dart';
 
 class MovieRepository {
