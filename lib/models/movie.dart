@@ -18,4 +18,8 @@ class Movie {
   });
 
   String get formattedPrice => '£${price.toStringAsFixed(2)}';
+
+  bool get isChildFriendly => ageRating == 'U' || ageRating == 'PG';
+
+  bool get isAdultOnly => ageRating == '18';
 }
