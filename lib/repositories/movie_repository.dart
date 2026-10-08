@@ -5,7 +5,7 @@ class MovieRepository {
     return const [
       Movie(
           id: 'ted',
-          name: 'Ted 2',
+          name: 'TED 2',
           year: '2012',
           ageRating: '15',
           description:
@@ -14,7 +14,7 @@ class MovieRepository {
           imagePath: 'assets/images/ted.jpg'),
       Movie(
           id: 'despicable-me',
-          name: 'Despicable Me',
+          name: 'DESPICABLE ME',
           year: '2010',
           ageRating: 'PG',
           description:
