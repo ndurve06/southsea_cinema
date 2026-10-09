@@ -64,37 +64,40 @@ class _MovieListingState extends State<MovieListing> {
         body: Container(
             color: cinemaBackground,
             padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${widget.movie.name} (${widget.movie.year}) (${widget.movie.ageRating})',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Image.asset(
-                  widget.movie.imagePath,
-                  width: 110,
-                  height: 165,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(height: 16),
-                Text("Southsea Cinema Room"),
-                const SizedBox(height: 4),
-                Row(
-                  children: const [Text("Friday 25 December 2026, 17:00")],
-                ),
-                const SizedBox(height: 32),
-                Row(
+            child: Container(
+                color: cinemaSurface,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: Text(widget.movie.description)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                /*Row(
+                    Text(
+                      '${widget.movie.name} (${widget.movie.year}) (${widget.movie.ageRating})',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Image.asset(
+                      widget.movie.imagePath,
+                      width: 110,
+                      height: 165,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 16),
+                    Text("Southsea Cinema Room"),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: const [Text("Friday 25 December 2026, 17:00")],
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      children: [
+                        Expanded(child: Text(widget.movie.description)),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    /*Row(
                   children: const [
                     Text(
                       "Please note that Discounts / Membership Benefits "
@@ -107,46 +110,46 @@ class _MovieListingState extends State<MovieListing> {
                   children: const [Text("Select Quantities (Upto 5 in total)")],
                 ),
                 const SizedBox(height: 32), */
-                const SizedBox(height: 16),
-                LayoutBuilder(builder: (context, constraints) {
-                  if (constraints.maxWidth > 600) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        Row(
+                    const SizedBox(height: 16),
+                    LayoutBuilder(builder: (context, constraints) {
+                      if (constraints.maxWidth > 600) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                                "Tickets (${widget.movie.formattedPrice} each)"),
-                            SizedBox(width: 100),
-                            ticketDropdown,
-                            SizedBox(width: 10),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Text(
+                                    "Tickets (${widget.movie.formattedPrice} each)"),
+                                SizedBox(width: 100),
+                                ticketDropdown,
+                                SizedBox(width: 10),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            addButton,
                           ],
-                        ),
-                        const SizedBox(height: 16),
-                        addButton,
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                        );
+                      } else {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
-                            const SizedBox(width: 30),
-                            ticketDropdown,
-                            const SizedBox(width: 10),
+                            Row(
+                              children: [
+                                Text(
+                                    "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
+                                const SizedBox(width: 30),
+                                ticketDropdown,
+                                const SizedBox(width: 10),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            addButton,
                           ],
-                        ),
-                        const SizedBox(height: 16),
-                        addButton,
-                      ],
-                    );
-                  }
-                })
-              ],
-            )));
+                        );
+                      }
+                    })
+                  ],
+                ))));
   }
 }
