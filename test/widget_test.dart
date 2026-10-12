@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/main.dart';
+import 'package:southsea_cinema/screens/movie_listing.dart';
 
 //Run test cases in termial:
 //flutter test test/widget_test.dart
@@ -37,5 +38,15 @@ void main() {
     await tester.tap(find.text('ADD TO ORDER'));
     await tester.pumpAndSettle();
     expect(find.text('ADDED'), findsOneWidget);
+  });
+
+  testWidgets('Navigate from home page to movie listing',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const SouthseaCinemaApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('BOOK NOW').first);
+    await tester.pumpAndSettle();
+    expect(find.byType(MovieListing), findsOneWidget);
+    //expect()
   });
 }
