@@ -1,0 +1,25 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:southsea_cinema/models/user_settings.dart';
+
+void main() {
+  test('UserSettings defaults to empty values and false newsletter', () {
+    const UserSettings settings = UserSettings();
+    expect(settings.name, isEmpty);
+    expect(settings.address, isEmpty);
+    expect(settings.email, isEmpty);
+    expect(settings.recieveNewsletter, false);
+  });
+
+  test('UserSettings stores configured values', () {
+    const UserSettings settings = UserSettings(
+      name: 'Taylor Reed',
+      address: '22 Guildhall Walk',
+      email: 'taylor@example.com',
+      recieveNewsletter: true,
+    );
+    expect(settings.name, 'Taylor Reed');
+    expect(settings.address, '22 Guildhall Walk');
+    expect(settings.email, 'taylor@example.com');
+    expect(settings.recieveNewsletter, isTrue);
+  });
+}
