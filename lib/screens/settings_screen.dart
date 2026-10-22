@@ -9,6 +9,7 @@ const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
+const String prefpatronNumber = 'user_patron';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -24,6 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _addressController;
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
+  late TextEditingController _patronController;
   String _confirmationMessage = '';
 
   @override
@@ -32,6 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _nameController = TextEditingController();
     _addressController = TextEditingController();
     _emailController = TextEditingController();
+    _patronController = TextEditingController();
     _loadSettings();
   }
 
@@ -41,6 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final String? savedAddress = await prefs.getString(prefAddress);
     final String? savedEmail = await prefs.getString(prefEmail);
     final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
+    final String? savedPatron = await prefs.getString(prefpatronNumber);
 
     String name = '';
     if (savedName != null) {
@@ -57,6 +61,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       email = savedEmail;
     }
 
+    String patron = '';
+    if (savedPatron != null) {
+      email = savedPatron;
+    }
+
     bool newsletter = false;
     if (savedNewsletter != null) {
       newsletter = savedNewsletter;
@@ -70,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _addressController.text = address;
       _emailController.text = email;
       _receiveNewsletter = newsletter;
+      _patronController.text = patron;
     });
   }
 
@@ -116,6 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   hintText: 'Enter your name',
                 ),
               ),
+              const SizedBox(height: 16),
               Text(
                 'Address',
                 style: TextStyle(
@@ -147,6 +158,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'Email address',
                   hintText: 'Enter your email',
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Patron Number',
+                style: TextStyle(
+                  color: cinemaFontMuted,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Patron Number',
+                  hintText: 'Enter your patron number',
                 ),
               ),
               const SizedBox(height: 16),
