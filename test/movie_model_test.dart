@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/models/movie.dart';
 
+//Run test cases in termial:
+//flutter test test/movie_model_test.dart
+
 void main() {
   group('Movie model tests', () {
     test('creates Movie instance with given properties', () {
@@ -102,6 +105,44 @@ void main() {
           price: 8.99,
           imagePath: 'assets/images/interstellar.jpg');
       expect(movie.isAdultOnly, false);
+    });
+
+    test('JSON conversion preserves every movie field', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'despicable-me',
+        'name': 'DESPICABLE ME',
+        'year': '2010',
+        'ageRating': 'PG',
+        'description':
+            'Longtime villain Felonious Gru has his pride hurt when an unknown rival steals the Great Pyramid of Giza.',
+        'price': 7.99,
+        'imagePath': 'assets/images/despicable_me.jpg'
+      };
+      final Movie movie = Movie.fromJson(data);
+      expect(movie.id, 'despicable-me');
+      expect(movie.name, 'DESPICABLE ME');
+      expect(movie.year, '2010');
+      expect(movie.ageRating, 'PG');
+      expect(movie.description,
+          'Longtime villain Felonious Gru has his pride hurt when an unknown rival steals the Great Pyramid of Giza.');
+      expect(movie.price, 7.99);
+      expect(movie.imagePath, 'assets/images/despicable_me.jpg');
+    });
+
+    test('fromJson accepts a whole-number price', () {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'id': 'despicable-me',
+        'name': 'DESPICABLE ME',
+        'year': '2010',
+        'ageRating': 'PG',
+        'description':
+            'Longtime villain Felonious Gru has his pride hurt when an unknown rival steals the Great Pyramid of Giza.',
+        'price': 7.99,
+        'imagePath': 'assets/images/despicable_me.jpg'
+      };
+      final Movie movie = Movie.fromJson(data);
+      expect(movie.price, 7.99);
+      expect(movie.price, isA<double>());
     });
   });
 }
