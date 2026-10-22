@@ -124,7 +124,7 @@ class _MovieListingState extends State<MovieListing> {
                               children: [
                                 Text(
                                     "Tickets (${widget.movie.formattedPrice} each)"),
-                                SizedBox(width: 100),
+                                const SizedBox(width: 16),
                                 ticketDropdown,
                                 SizedBox(width: 10),
                               ],
