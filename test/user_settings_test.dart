@@ -7,7 +7,7 @@ void main() {
     expect(settings.name, isEmpty);
     expect(settings.address, isEmpty);
     expect(settings.email, isEmpty);
-    expect(settings.recieveNewsletter, false);
+    expect(settings.receiveNewsletter, false);
   });
 
   test('UserSettings stores configured values', () {
@@ -15,11 +15,11 @@ void main() {
       name: 'Taylor Reed',
       address: '22 Guildhall Walk',
       email: 'taylor@example.com',
-      recieveNewsletter: true,
+      receiveNewsletter: true,
     );
     expect(settings.name, 'Taylor Reed');
     expect(settings.address, '22 Guildhall Walk');
     expect(settings.email, 'taylor@example.com');
-    expect(settings.recieveNewsletter, isTrue);
+    expect(settings.receiveNewsletter, isTrue);
   });
 }
