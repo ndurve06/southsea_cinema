@@ -15,7 +15,7 @@ class BasketScreen extends StatefulWidget {
 }
 
 class _BasketScreenState extends State<BasketScreen> {
-  String _confirmationMessage = '';
+  final String _confirmationMessage = '';
 
   Widget _buildEmptyState() {
     return const Center(

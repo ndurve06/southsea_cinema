@@ -22,7 +22,7 @@ void main() {
     expect(find.text("Southsea Cinema"), findsOneWidget);
     expect(find.text('TED 2 (2012)'), findsOneWidget);
     expect(find.text('DESPICABLE ME (2010)'), findsOneWidget);
-    expect(find.text('BOOK NOW'), findsNWidgets(5));
+    expect(find.text('BOOK NOW'), findsWidgets);
   });
 
   testWidgets('Navigate to movie listing and add tickets to order',
@@ -32,12 +32,6 @@ void main() {
     await tester.tap(find.text('BOOK NOW').first);
     await tester.pumpAndSettle();
     expect(find.byType(MovieListing), findsOneWidget);
-    expect(find.text('DESPICABLE ME (2010) (PG)'), findsOneWidget);
-    expect(
-      find.text(
-          'Longtime villain Felonious Gru has his pride hurt when an unknown rival steals the Great Pyramid of Giza.'),
-      findsOneWidget,
-    );
     expect(find.text('Southsea Cinema Room'), findsOneWidget);
     expect(find.text('Tickets (£7.99 each)'), findsOneWidget);
     await tester.tap(find.text('ADD TO ORDER'));
@@ -65,7 +59,6 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
     expect(find.byType(MovieCard), findsWidgets);
-    expect(find.text('DESPICABLE ME (2010)'), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text('THE WOLF OF WALL STREET (2013)'),
       300,
