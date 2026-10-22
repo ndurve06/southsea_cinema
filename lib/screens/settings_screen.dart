@@ -9,7 +9,7 @@ const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
-const String prefpatronNumber = 'user_patron';
+const String prefPatronNumber = 'user_patron';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final String? savedAddress = await prefs.getString(prefAddress);
     final String? savedEmail = await prefs.getString(prefEmail);
     final bool? savedNewsletter = await prefs.getBool(prefNewsletter);
-    final String? savedPatron = await prefs.getString(prefpatronNumber);
+    final String? savedPatron = await prefs.getString(prefPatronNumber);
 
     String name = '';
     if (savedName != null) {
@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     String patron = '';
     if (savedPatron != null) {
-      email = savedPatron;
+      patron = savedPatron;
     }
 
     bool newsletter = false;
@@ -88,6 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _nameController.dispose();
     _addressController.dispose();
     _emailController.dispose();
+    _patronController.dispose();
     super.dispose();
   }
 
@@ -169,8 +170,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
+                controller: _patronController,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Patron Number',
@@ -233,11 +234,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final String name = _nameController.text.trim();
     final String address = _addressController.text.trim();
     final String email = _emailController.text.trim();
+    final String patron = _patronController.text.trim();
     final SharedPreferencesAsync prefs = SharedPreferencesAsync();
     await prefs.setString(prefName, name);
     await prefs.setString(prefAddress, address);
     await prefs.setString(prefEmail, email);
     await prefs.setBool(prefNewsletter, _receiveNewsletter);
+    await prefs.setString(prefPatronNumber, patron);
 
     if (!mounted) return;
 
