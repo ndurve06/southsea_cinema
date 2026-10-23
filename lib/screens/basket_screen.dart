@@ -15,6 +15,9 @@ class BasketScreen extends StatefulWidget {
 }
 
 class _BasketScreenState extends State<BasketScreen> {
+  bool isOrderUpdated = false;
+  bool isTicketBought = false;
+
   final String _confirmationMessage = '';
 
   Widget _buildEmptyState() {
@@ -194,13 +197,23 @@ class _BasketScreenState extends State<BasketScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              PrimaryButton(label: 'UPDATE ORDER', onPressed: () {}),
+              PrimaryButton(
+                  label: isOrderUpdated ? 'UPDATED' : 'UPDATE ORDER',
+                  onPressed: () {
+                    setState(() {
+                      isOrderUpdated = true;
+                    });
+                  }),
               Expanded(
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: PrimaryButton(
-                    label: 'BUY TICKETS',
-                    onPressed: () {},
+                    label: isTicketBought ? 'BOUGHT' : 'BUY TICKETS',
+                    onPressed: () {
+                      setState(() {
+                        isTicketBought = true;
+                      });
+                    },
                   ),
                 ),
               ),
