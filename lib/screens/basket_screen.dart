@@ -4,6 +4,8 @@ import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/repositories/cart_repository.dart';
 import 'package:southsea_cinema/models/cart_item.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
+import 'package:southsea_cinema/database/cinema_db.dart';
+import 'package:southsea_cinema/models/booking.dart';
 
 class BasketScreen extends StatefulWidget {
   const BasketScreen({super.key});
@@ -18,7 +20,73 @@ class _BasketScreenState extends State<BasketScreen> {
   bool isOrderUpdated = false;
   bool isTicketBought = false;
 
-  final String _confirmationMessage = '';
+  String _confirmationMessage = '';
+
+  String _buildSummary(List<CartItem> items) {
+    final List<String> parts = [];
+
+    for (final CartItem item in items) {
+      parts.add('${item.quantity} x ${item.movie.name}');
+    }
+
+    return parts.join(', ');
+  }
+
+  String _formatDate(DateTime now) {
+    final String day = now.day.toString().padLeft(2, '0');
+    final String month = now.month.toString().padLeft(2, '0');
+    final String hour = now.hour.toString().padLeft(2, '0');
+    final String minute = now.minute.toString().padLeft(2, '0');
+
+    return '$day/$month/${now.year} $hour:$minute';
+  }
+
+  Future<void> _checkout() async {
+    final CartRepository cart = CartRepository.instance;
+    final List<CartItem> items = cart.getItems();
+
+    if (items.isEmpty) {
+      return;
+    }
+
+    try {
+      final int bookingNumber =
+          await CinemaDatabase.instance.getNextBookingNumber();
+
+      final Booking booking = Booking(
+        bookingNumber: bookingNumber,
+        summary: _buildSummary(items),
+        total: cart.getTotal() + 4.00,
+        date: _formatDate(DateTime.now()),
+      );
+
+      await CinemaDatabase.instance.insertBooking(booking);
+
+      cart.clear();
+
+      // The widget may have been removed while the database calls ran.
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        isTicketBought = true;
+        _confirmationMessage =
+            'Your booking has been confirmed! Booking number: $bookingNumber';
+      });
+      Navigator.pushNamed(context, '/bookings');
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to complete your booking. Please try again.'),
+        ),
+      );
+    }
+  }
 
   Widget _buildEmptyState() {
     return const Center(
@@ -104,7 +172,6 @@ class _BasketScreenState extends State<BasketScreen> {
         content = _buildEmptyState();
       }
     } else {
-      //content = const Text('Basket list placeholder');
       content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,26 +212,19 @@ class _BasketScreenState extends State<BasketScreen> {
               item,
               items.indexOf(item),
             ),
-          //const Divider(),
           const SizedBox(height: 24),
-          Row(
+          const Row(
             children: [
               Text(
                 'Service Charge',
-                style: TextStyle(
-                  fontSize: 16,
-                  //fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16),
               ),
               Expanded(
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
                     '£4.00',
-                    style: TextStyle(
-                      fontSize: 16,
-                      //fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ),
@@ -173,7 +233,7 @@ class _BasketScreenState extends State<BasketScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              Text(
+              const Text(
                 'Total Due',
                 style: TextStyle(
                   fontSize: 20,
@@ -185,7 +245,7 @@ class _BasketScreenState extends State<BasketScreen> {
                   alignment: Alignment.centerRight,
                   child: Text(
                     '£${(cart.getTotal() + 4).toStringAsFixed(2)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -209,11 +269,7 @@ class _BasketScreenState extends State<BasketScreen> {
                   alignment: Alignment.centerRight,
                   child: PrimaryButton(
                     label: isTicketBought ? 'BOUGHT' : 'BUY TICKETS',
-                    onPressed: () {
-                      setState(() {
-                        isTicketBought = true;
-                      });
-                    },
+                    onPressed: _checkout,
                   ),
                 ),
               ),
