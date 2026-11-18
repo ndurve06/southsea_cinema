@@ -49,17 +49,65 @@ class _BookingsScreenState extends State<BookingsScreen> {
     }
   }
 
+  Widget _buildBookingCard(Booking booking) {
+    return Card(
+      color: cinemaSurface,
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Booking #${booking.bookingNumber}',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: cinemaBrand,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Summary: ${booking.summary}',
+              style: const TextStyle(color: cinemaFontWhite),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Date: ${booking.date}',
+              style: const TextStyle(color: cinemaFontMuted),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Total: £${booking.total.toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: cinemaFontWhite,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content;
 
     if (_loading) {
       content = const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: cinemaBrand),
       );
     } else if (_errorMessage.isNotEmpty) {
       content = Center(
-        child: Text(_errorMessage),
+        child: Text(
+          _errorMessage,
+          style: const TextStyle(color: cinemaFontWhite),
+        ),
       );
     } else if (_bookings.isEmpty) {
       content = const Center(
@@ -67,7 +115,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           'No previous bookings found.',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: cinemaFontMuted,
           ),
         ),
       );
@@ -75,42 +123,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
       content = ListView.builder(
         itemCount: _bookings.length,
         itemBuilder: (context, index) {
-          final Booking booking = _bookings[index];
-
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Booking #${booking.bookingNumber}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Summary: ${booking.summary}'),
-                  const SizedBox(height: 4),
-                  Text('Date: ${booking.date}'),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Total: £${booking.total.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return _buildBookingCard(_bookings[index]);
         },
       );
     }
 
     return Scaffold(
+      backgroundColor: cinemaBackground,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -128,10 +147,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'MY BOOKINGS',
+              'My Bookings',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: cinemaFontWhite,
               ),
             ),
             const SizedBox(height: 16),

@@ -22,6 +22,42 @@ class _BasketScreenState extends State<BasketScreen> {
 
   String _confirmationMessage = '';
 
+  List<Booking> _bookings = [];
+  bool _bookingsLoading = true;
+  String _bookingsError = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookings();
+  }
+
+  Future<void> _loadBookings() async {
+    try {
+      final List<Booking> bookings =
+          await CinemaDatabase.instance.getAllBookings();
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _bookings = bookings;
+        _bookingsError = '';
+        _bookingsLoading = false;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _bookingsError = 'Could not load bookings: $error';
+        _bookingsLoading = false;
+      });
+    }
+  }
+
   String _buildSummary(List<CartItem> items) {
     final List<String> parts = [];
 
@@ -64,7 +100,6 @@ class _BasketScreenState extends State<BasketScreen> {
 
       cart.clear();
 
-      // The widget may have been removed while the database calls ran.
       if (!mounted) {
         return;
       }
@@ -74,7 +109,9 @@ class _BasketScreenState extends State<BasketScreen> {
         _confirmationMessage =
             'Your booking has been confirmed! Booking number: $bookingNumber';
       });
-      Navigator.pushNamed(context, '/bookings');
+
+      // Refresh the list below the basket so the new booking appears.
+      await _loadBookings();
     } catch (error) {
       if (!mounted) {
         return;
@@ -146,6 +183,99 @@ class _BasketScreenState extends State<BasketScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBookingCard(Booking booking) {
+    return Card(
+      color: cinemaSurface,
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Booking #${booking.bookingNumber}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: cinemaBrand,
+                  ),
+                ),
+                Text(
+                  '£${booking.total.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: cinemaFontWhite,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              booking.summary,
+              style: const TextStyle(color: cinemaFontWhite),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              booking.date,
+              style: const TextStyle(fontSize: 12, color: cinemaFontMuted),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPastBookings() {
+    final Widget list;
+
+    if (_bookingsLoading) {
+      list = const Center(
+        child: CircularProgressIndicator(color: cinemaBrand),
+      );
+    } else if (_bookingsError.isNotEmpty) {
+      list = Text(
+        _bookingsError,
+        style: const TextStyle(color: cinemaFontWhite),
+      );
+    } else if (_bookings.isEmpty) {
+      list = const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: Text(
+          'No previous bookings found.',
+          style: TextStyle(fontSize: 16, color: cinemaFontMuted),
+        ),
+      );
+    } else {
+      list = Column(
+        children: [
+          for (final Booking booking in _bookings) _buildBookingCard(booking),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 32),
+        const Text(
+          'PAST BOOKINGS',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        list,
+      ],
     );
   }
 
@@ -289,7 +419,13 @@ class _BasketScreenState extends State<BasketScreen> {
       drawer: const NavDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: content,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            content,
+            _buildPastBookings(),
+          ],
+        ),
       ),
     );
   }
