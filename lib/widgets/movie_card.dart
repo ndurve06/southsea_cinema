@@ -12,7 +12,7 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: cinemaBackground,
+      color: Theme.of(context).colorScheme.surface,
       margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -53,7 +53,6 @@ class MovieCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         movie.description,
-                        style: const TextStyle(color: Colors.white),
                       ),
                     ],
                   ),

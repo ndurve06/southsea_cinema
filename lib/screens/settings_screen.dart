@@ -10,9 +10,17 @@ const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
 const String prefPatronNumber = 'user_patron';
+const String prefDarkMode = 'dark_mode';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final bool isDarkMode;
+  final ValueChanged<bool>? onDarkModeChanged;
+
+  const SettingsScreen({
+    super.key,
+    this.isDarkMode = true,
+    this.onDarkModeChanged,
+  });
 
   @override
   State<SettingsScreen> createState() {
@@ -25,17 +33,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _addressController;
   late TextEditingController _emailController;
   bool _receiveNewsletter = false;
+  late bool _isDarkMode;
   late TextEditingController _patronController;
   String _confirmationMessage = '';
 
   @override
   void initState() {
     super.initState();
+    _isDarkMode = widget.isDarkMode;
     _nameController = TextEditingController();
     _addressController = TextEditingController();
     _emailController = TextEditingController();
     _patronController = TextEditingController();
     _loadSettings();
+  }
+
+  @override
+  void didUpdateWidget(covariant SettingsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isDarkMode != widget.isDarkMode) {
+      _isDarkMode = widget.isDarkMode;
+    }
   }
 
   Future<void> _loadSettings() async {
@@ -94,6 +112,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color mutedTextColor = Theme.of(context).colorScheme.onSurfaceVariant;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(appTitle, style: cinemaHeaderStyle),
@@ -114,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Name',
                 style: TextStyle(
-                  color: cinemaFontMuted,
+                  color: mutedTextColor,
                 ),
               ),
               const SizedBox(height: 16),
@@ -131,7 +151,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Address',
                 style: TextStyle(
-                  color: cinemaFontMuted,
+                  color: mutedTextColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -148,7 +168,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Email Address',
                 style: TextStyle(
-                  color: cinemaFontMuted,
+                  color: mutedTextColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -165,7 +185,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Patron Number',
                 style: TextStyle(
-                  color: cinemaFontMuted,
+                  color: mutedTextColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -182,14 +202,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Preferences',
                 style: TextStyle(
-                  color: cinemaFontMuted,
+                  color: mutedTextColor,
                 ),
               ),
               const SizedBox(height: 16),
               Row(
                 children: [
+                  const Expanded(child: Text('Dark mode')),
+                  Switch(
+                    key: const Key('darkModeSwitch'),
+                    value: _isDarkMode,
+                    onChanged: _updateDarkMode,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
                   const Expanded(child: Text('Receive news by email')),
                   Switch(
+                    key: const Key('newsletterSwitch'),
                     value: _receiveNewsletter,
                     onChanged: (bool value) {
                       setState(() {
@@ -204,8 +235,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: cinemaSurface,
-                        foregroundColor: cinemaFontWhite,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onSurface,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
@@ -254,5 +286,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _confirmationMessage = 'Settings saved for ${settings.name}';
     });
+  }
+
+  Future<void> _updateDarkMode(bool isDarkMode) async {
+    setState(() {
+      _isDarkMode = isDarkMode;
+    });
+    widget.onDarkModeChanged?.call(isDarkMode);
+
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    await prefs.setBool(prefDarkMode, isDarkMode);
   }
 }

@@ -65,10 +65,10 @@ class _MovieListingState extends State<MovieListing> {
         drawer: const NavDrawer(),
         // body: const SizedBox.shrink(),
         body: Container(
-            color: cinemaBackground,
+            color: Theme.of(context).scaffoldBackgroundColor,
             padding: EdgeInsets.all(16.0),
             child: Container(
-                color: cinemaSurface,
+                color: Theme.of(context).colorScheme.surface,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

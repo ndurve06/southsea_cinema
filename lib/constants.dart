@@ -12,7 +12,6 @@ const Color cinemaFontMuted = Color(0xFF8A90A0);
 const Color cinemaSurface = Color(0xFF242936);
 
 const TextStyle cinemaHeaderStyle = TextStyle(
-  color: cinemaFontWhite,
   fontSize: 18,
   fontWeight: FontWeight.bold,
 );

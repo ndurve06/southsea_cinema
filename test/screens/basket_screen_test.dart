@@ -70,7 +70,7 @@ void main() {
         (WidgetTester tester) async {
       await pumpBasket(tester);
 
-      expect(find.text('PAST BOOKINGS'), findsOneWidget);
+      expect(find.text('Past Bookings'), findsOneWidget);
       expect(find.text('No previous bookings found.'), findsOneWidget);
     });
 

@@ -50,7 +50,7 @@ void main() {
       emailField,
       'gerald.vernon-jackson@portsmouthcc.gov.uk',
     );
-    final switchFinder = find.byType(Switch);
+    final switchFinder = find.byKey(const Key('newsletterSwitch'));
     await tester.ensureVisible(switchFinder);
     await tester.pumpAndSettle();
     await tester.tap(switchFinder);
@@ -78,7 +78,8 @@ void main() {
       find.text('gerald.vernon-jackson@portsmouthcc.gov.uk'),
       findsOneWidget,
     );
-    final Switch reopenedSwitch = tester.widget<Switch>(find.byType(Switch));
+    final Switch reopenedSwitch =
+        tester.widget<Switch>(find.byKey(const Key('newsletterSwitch')));
     expect(reopenedSwitch.value, isTrue);
   });
 
@@ -98,7 +99,8 @@ void main() {
     expect(find.text('Abdul Kadir'), findsOneWidget);
     expect(find.text('Portsmouth Guildhall, PO1 2AJ'), findsOneWidget);
     expect(find.text('abdul.kadir@portsmouthcc.gov.uk'), findsOneWidget);
-    final Switch switchWidget = tester.widget<Switch>(find.byType(Switch));
+    final Switch switchWidget =
+        tester.widget<Switch>(find.byKey(const Key('newsletterSwitch')));
     expect(switchWidget.value, isTrue);
   });
 }

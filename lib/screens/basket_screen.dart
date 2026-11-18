@@ -126,12 +126,15 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 32.0),
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
         child: Text(
           'Your basket is empty',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );
@@ -170,8 +173,8 @@ class _BasketScreenState extends State<BasketScreen> {
           IconButton(
             key: Key('delete_${item.movie.id}'),
             style: IconButton.styleFrom(
-                backgroundColor: cinemaBrand,
-                foregroundColor: cinemaFontWhite,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 )),
@@ -189,7 +192,7 @@ class _BasketScreenState extends State<BasketScreen> {
 
   Widget _buildBookingCard(Booking booking) {
     return Card(
-      color: cinemaSurface,
+      color: Theme.of(context).colorScheme.surface,
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: const RoundedRectangleBorder(
@@ -214,7 +217,6 @@ class _BasketScreenState extends State<BasketScreen> {
                   '£${booking.total.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: cinemaFontWhite,
                   ),
                 ),
               ],
@@ -222,12 +224,14 @@ class _BasketScreenState extends State<BasketScreen> {
             const SizedBox(height: 4),
             Text(
               booking.summary,
-              style: const TextStyle(color: cinemaFontWhite),
             ),
             const SizedBox(height: 4),
             Text(
               booking.date,
-              style: const TextStyle(fontSize: 12, color: cinemaFontMuted),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -245,14 +249,16 @@ class _BasketScreenState extends State<BasketScreen> {
     } else if (_bookingsError.isNotEmpty) {
       list = Text(
         _bookingsError,
-        style: const TextStyle(color: cinemaFontWhite),
       );
     } else if (_bookings.isEmpty) {
-      list = const Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+      list = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Text(
           'No previous bookings found.',
-          style: TextStyle(fontSize: 16, color: cinemaFontMuted),
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       );
     } else {
@@ -268,7 +274,7 @@ class _BasketScreenState extends State<BasketScreen> {
       children: [
         const SizedBox(height: 32),
         const Text(
-          'PAST BOOKINGS',
+          'Past Bookings',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -412,11 +418,9 @@ class _BasketScreenState extends State<BasketScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text(appTitle, style: cinemaHeaderStyle),
-          backgroundColor: cinemaSurface,
-          iconTheme: const IconThemeData(color: cinemaBrand),
-          elevation: 0),
+        centerTitle: true,
+        title: const Text(appTitle, style: cinemaHeaderStyle),
+      ),
       drawer: const NavDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

@@ -51,7 +51,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Widget _buildBookingCard(Booking booking) {
     return Card(
-      color: cinemaSurface,
+      color: Theme.of(context).colorScheme.surface,
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: const RoundedRectangleBorder(
@@ -73,19 +73,19 @@ class _BookingsScreenState extends State<BookingsScreen> {
             const SizedBox(height: 8),
             Text(
               'Summary: ${booking.summary}',
-              style: const TextStyle(color: cinemaFontWhite),
             ),
             const SizedBox(height: 4),
             Text(
               'Date: ${booking.date}',
-              style: const TextStyle(color: cinemaFontMuted),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               'Total: £${booking.total.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: cinemaFontWhite,
               ),
             ),
           ],
@@ -106,16 +106,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
       content = Center(
         child: Text(
           _errorMessage,
-          style: const TextStyle(color: cinemaFontWhite),
         ),
       );
     } else if (_bookings.isEmpty) {
-      content = const Center(
+      content = Center(
         child: Text(
           'No previous bookings found.',
           style: TextStyle(
             fontSize: 16,
-            color: cinemaFontMuted,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       );
@@ -129,16 +128,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
     }
 
     return Scaffold(
-      backgroundColor: cinemaBackground,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
           appTitle,
           style: cinemaHeaderStyle,
         ),
-        backgroundColor: cinemaSurface,
-        iconTheme: const IconThemeData(color: cinemaBrand),
-        elevation: 0,
       ),
       drawer: const NavDrawer(),
       body: Padding(
@@ -151,7 +146,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: cinemaFontWhite,
               ),
             ),
             const SizedBox(height: 16),
