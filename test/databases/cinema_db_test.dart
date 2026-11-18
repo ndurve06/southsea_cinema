@@ -35,7 +35,8 @@ void main() {
     );
     expect(id, greaterThan(0));
 
-    final List<Booking> bookings = await CinemaDatabase.instance.getAllBookings();
+    final List<Booking> bookings =
+        await CinemaDatabase.instance.getAllBookings();
     expect(bookings.length, 1);
     expect(bookings[0].id, id);
     expect(bookings[0].summary, '1 ticket - Despicable Me');
@@ -62,7 +63,8 @@ void main() {
       buildRecord(1002, 'Second', 7.0),
     );
 
-    final List<Booking> bookings = await CinemaDatabase.instance.getAllBookings();
+    final List<Booking> bookings =
+        await CinemaDatabase.instance.getAllBookings();
     expect(bookings[0].bookingNumber, 1003);
     expect(bookings[1].bookingNumber, 1002);
     expect(bookings[2].bookingNumber, 1001);
