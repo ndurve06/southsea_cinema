@@ -168,6 +168,7 @@ class _BasketScreenState extends State<BasketScreen> {
           ),
           const SizedBox(width: 8),
           IconButton(
+            key: Key('delete_${item.movie.id}'),
             style: IconButton.styleFrom(
                 backgroundColor: cinemaBrand,
                 foregroundColor: cinemaFontWhite,

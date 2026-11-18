@@ -192,4 +192,62 @@ void main() {
       );
     });
   });
+
+  group('Basket Screen - deleting a film', () {
+    testWidgets('Deleting the middle film keeps the other two',
+        (WidgetTester tester) async {
+      const Movie first = Movie(
+        id: 'test-1',
+        name: 'Despicable Me',
+        year: '2010',
+        ageRating: 'U',
+        description: 'A test movie.',
+        price: 6.0,
+        imagePath: 'assets/test.png',
+      );
+      const Movie middle = Movie(
+        id: 'test-2',
+        name: 'Wolf of Wall Street',
+        year: '2013',
+        ageRating: '18',
+        description: 'A test movie.',
+        price: 8.0,
+        imagePath: 'assets/test.png',
+      );
+      const Movie last = Movie(
+        id: 'test-3',
+        name: 'Toy Story',
+        year: '1995',
+        ageRating: 'U',
+        description: 'A test movie.',
+        price: 5.0,
+        imagePath: 'assets/test.png',
+      );
+
+      CartRepository.instance.addItem(
+        const CartItem(movie: first, quantity: 1),
+      );
+      CartRepository.instance.addItem(
+        const CartItem(movie: middle, quantity: 1),
+      );
+      CartRepository.instance.addItem(
+        const CartItem(movie: last, quantity: 1),
+      );
+
+      await pumpBasket(tester);
+
+      expect(find.textContaining('Despicable Me'), findsOneWidget);
+      expect(find.textContaining('Wolf of Wall Street'), findsOneWidget);
+      expect(find.textContaining('Toy Story'), findsOneWidget);
+
+      await tester.ensureVisible(find.byKey(const Key('delete_test-2')));
+      await tester.tap(find.byKey(const Key('delete_test-2')));
+      await tester.pump();
+
+      expect(find.textContaining('Despicable Me'), findsOneWidget);
+      expect(find.textContaining('Wolf of Wall Street'), findsNothing);
+      expect(find.textContaining('Toy Story'), findsOneWidget);
+      expect(CartRepository.instance.getItems().length, 2);
+    });
+  });
 }
