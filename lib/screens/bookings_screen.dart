@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/database/cinema_db.dart';
 import 'package:southsea_cinema/models/booking.dart';
+import 'package:southsea_cinema/widgets/booking_items_list.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 
 class BookingsScreen extends StatefulWidget {
@@ -71,9 +72,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Summary: ${booking.summary}',
-            ),
+            if (booking.items.isEmpty)
+              Text('Summary: ${booking.summary}')
+            else
+              BookingItemsList(items: booking.items),
             const SizedBox(height: 4),
             Text(
               'Date: ${booking.date}',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/database/cinema_db.dart';
 import 'package:southsea_cinema/models/booking.dart';
+import 'package:southsea_cinema/models/booking_item.dart';
 import 'package:southsea_cinema/models/cart_item.dart';
 import 'package:southsea_cinema/models/movie.dart';
 import 'package:southsea_cinema/repositories/cart_repository.dart';
@@ -54,7 +55,8 @@ void main() {
     final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
       inMemoryDatabasePath,
       options: OpenDatabaseOptions(
-        version: 1,
+        version: 2,
+        onConfigure: CinemaDatabase.instance.configureDatabase,
         onCreate: CinemaDatabase.instance.createTables,
       ),
     );
@@ -107,6 +109,34 @@ void main() {
       final double oldestY = tester.getTopLeft(find.text('Booking #1001')).dy;
       expect(newestY, lessThan(oldestY));
     });
+
+    testWidgets('Lists item details for bookings with item rows',
+        (WidgetTester tester) async {
+      await tester.runAsync(() async {
+        await CinemaDatabase.instance.insertBookingWithItems(
+          const Booking(
+            bookingNumber: 1003,
+            summary: '2 x Despicable Me',
+            total: 16.0,
+            date: '03/01/2026 12:00',
+          ),
+          const <BookingItem>[
+            BookingItem(
+              filmId: 'test-1',
+              filmName: 'Despicable Me',
+              unitPrice: 6.0,
+              quantity: 2,
+            ),
+          ],
+        );
+      });
+
+      await pumpBasket(tester);
+
+      expect(find.text('2 x Despicable Me'), findsOneWidget);
+      expect(find.text('Unit price: £6.00'), findsOneWidget);
+      expect(find.text('Line total: £12.00'), findsOneWidget);
+    });
   });
 
   group('Basket Screen - checkout', () {
@@ -144,6 +174,9 @@ void main() {
         expect(bookings[0].bookingNumber, expectedNumber);
         expect(bookings[0].summary, '2 x Despicable Me');
         expect(bookings[0].total, 16.0);
+        expect(bookings[0].items.single.unitPrice, 6.0);
+        expect(bookings[0].items.single.quantity, 2);
+        expect(bookings[0].items.single.lineTotal, 12.0);
       }
 
       // The basket was cleared and the confirmation shows the number.

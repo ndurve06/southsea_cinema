@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/models/booking.dart';
+import 'package:southsea_cinema/models/booking_item.dart';
 
 // flutter test test/booking_model_test.dart
 
@@ -64,6 +65,31 @@ void main() {
         'total': 12.0,
         'date': '2026-11-11',
       });
+    });
+
+    test('Booking item maps persisted fields and calculates its line total',
+        () {
+      const BookingItem item = BookingItem(
+        id: 8,
+        bookingId: 3,
+        filmId: 'despicable-me',
+        filmName: 'Despicable Me',
+        unitPrice: 6.0,
+        quantity: 2,
+      );
+
+      final BookingItem restored = BookingItem.fromMap(<String, Object?>{
+        'id': item.id,
+        ...item.toMapForBooking(item.bookingId!),
+      });
+
+      expect(restored.id, item.id);
+      expect(restored.bookingId, item.bookingId);
+      expect(restored.filmId, item.filmId);
+      expect(restored.filmName, item.filmName);
+      expect(restored.unitPrice, item.unitPrice);
+      expect(restored.quantity, item.quantity);
+      expect(restored.lineTotal, 12.0);
     });
   });
 }

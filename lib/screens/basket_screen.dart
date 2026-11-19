@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/repositories/cart_repository.dart';
+import 'package:southsea_cinema/models/booking_item.dart';
 import 'package:southsea_cinema/models/cart_item.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
+import 'package:southsea_cinema/widgets/booking_items_list.dart';
 import 'package:southsea_cinema/database/cinema_db.dart';
 import 'package:southsea_cinema/models/booking.dart';
 
@@ -96,7 +98,18 @@ class _BasketScreenState extends State<BasketScreen> {
         date: _formatDate(DateTime.now()),
       );
 
-      await CinemaDatabase.instance.insertBooking(booking);
+      final List<BookingItem> bookingItems = items.map((CartItem item) {
+        return BookingItem(
+          filmId: item.movie.id,
+          filmName: item.movie.name,
+          unitPrice: item.movie.price,
+          quantity: item.quantity,
+        );
+      }).toList();
+      await CinemaDatabase.instance.insertBookingWithItems(
+        booking,
+        bookingItems,
+      );
 
       cart.clear();
 
@@ -222,9 +235,10 @@ class _BasketScreenState extends State<BasketScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            Text(
-              booking.summary,
-            ),
+            if (booking.items.isEmpty)
+              Text(booking.summary)
+            else
+              BookingItemsList(items: booking.items),
             const SizedBox(height: 4),
             Text(
               booking.date,
