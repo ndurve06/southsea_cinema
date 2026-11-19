@@ -8,6 +8,11 @@ import 'package:southsea_cinema/models/booking.dart';
 import 'package:southsea_cinema/models/booking_item.dart';
 
 void main() {
+  setUpAll(() {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  });
+
   setUp(() async {
     sqfliteFfiInit();
     final Database database = await databaseFactoryFfiNoIsolate.openDatabase(
@@ -32,6 +37,19 @@ void main() {
       total: total,
       date: '01/01/2026 10:00',
     );
+  }
+
+  Future<void> preparePersistentDatabase() async {
+    await CinemaDatabase.instance.close();
+    final Directory directory =
+        await Directory.systemTemp.createTemp('cinema_db_test_');
+    await databaseFactoryFfi.setDatabasesPath(directory.path);
+    CinemaDatabase.instance.setDatabase(null);
+
+    addTearDown(() async {
+      await CinemaDatabase.instance.close();
+      await directory.delete(recursive: true);
+    });
   }
 
   test('insertBooking stores a booking and returns its id', () async {
@@ -73,6 +91,41 @@ void main() {
     expect(bookings[0].bookingNumber, 1003);
     expect(bookings[1].bookingNumber, 1002);
     expect(bookings[2].bookingNumber, 1001);
+  });
+
+  test('database getter returns the same cached database instance', () async {
+    await preparePersistentDatabase();
+
+    final Database firstDatabase = await CinemaDatabase.instance.database;
+    final Database secondDatabase = await CinemaDatabase.instance.database;
+
+    expect(identical(firstDatabase, secondDatabase), isTrue);
+  });
+
+  test('close closes the cached database and the getter opens a new one',
+      () async {
+    await preparePersistentDatabase();
+
+    final Database firstDatabase = await CinemaDatabase.instance.database;
+    await CinemaDatabase.instance.close();
+
+    expect(firstDatabase.isOpen, isFalse);
+
+    final Database secondDatabase = await CinemaDatabase.instance.database;
+    expect(identical(firstDatabase, secondDatabase), isFalse);
+    expect(secondDatabase.isOpen, isTrue);
+  });
+
+  test('getAllBookings returns fresh sample bookings newest first', () async {
+    await preparePersistentDatabase();
+
+    final List<Booking> bookings =
+        await CinemaDatabase.instance.getAllBookings();
+
+    expect(
+      bookings.map((Booking booking) => booking.bookingNumber).toList(),
+      <int>[1003, 1002, 1001],
+    );
   });
 
   test('insertBookingWithItems saves a booking and its items together',
