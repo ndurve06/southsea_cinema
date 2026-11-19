@@ -59,100 +59,82 @@ class _MovieListingState extends State<MovieListing> {
     );
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
-        ),
-        drawer: const NavDrawer(),
-        // body: const SizedBox.shrink(),
-        body: Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            padding: EdgeInsets.all(16.0),
-            child: Container(
-                color: Theme.of(context).colorScheme.surface,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${widget.movie.name} (${widget.movie.year}) (${widget.movie.ageRating})',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Image.asset(
-                      widget.movie.imagePath,
-                      width: 110,
-                      height: 165,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 16),
-                    Text("Southsea Cinema Room"),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: const [Text("Friday 25 December 2026, 17:00")],
-                    ),
-                    const SizedBox(height: 32),
-                    Row(
-                      children: [
-                        Expanded(child: Text(widget.movie.description)),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    /*Row(
-                  children: const [
-                    Text(
-                      "Please note that Discounts / Membership Benefits "
-                      "will be applied once you have selected your tickets",
-                    )
-                  ],
+      appBar: AppBar(
+        title: const Text(appTitle),
+      ),
+      drawer: const NavDrawer(),
+      body: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          width: double.infinity,
+          color: Theme.of(context).colorScheme.surface,
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${widget.movie.name} (${widget.movie.year}) (${widget.movie.ageRating})',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: const [Text("Select Quantities (Upto 5 in total)")],
+                Image.asset(
+                  widget.movie.imagePath,
+                  width: 110,
+                  height: 165,
+                  fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 32), */
-                    const SizedBox(height: 16),
-                    LayoutBuilder(builder: (context, constraints) {
-                      if (constraints.maxWidth > 600) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Text(
-                                    "Tickets (${widget.movie.formattedPrice} each)"),
-                                const SizedBox(width: 16),
-                                ticketDropdown,
-                                SizedBox(width: 10),
-                              ],
+                const SizedBox(height: 16),
+                const Text("Southsea Cinema Room"),
+                const SizedBox(height: 4),
+                const Text("Friday 25 December 2026, 17:00"),
+                const SizedBox(height: 32),
+                Text(widget.movie.description),
+                const SizedBox(height: 32),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth > 600) {
+                      // Wide screens: everything on one line
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Tickets (${widget.movie.formattedPrice} each)"),
+                          const SizedBox(width: 16),
+                          ticketDropdown,
+                          const SizedBox(width: 16),
+                          addButton,
+                        ],
+                      );
+                    } else {
+                      // Narrow screens: label, dropdown, then button stacked
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Tickets (${widget.movie.formattedPrice} each)",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(height: 16),
-                            addButton,
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                    "Tickets (£${widget.movie.price.toStringAsFixed(2)} each)"),
-                                const SizedBox(width: 30),
-                                ticketDropdown,
-                                const SizedBox(width: 10),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            addButton,
-                          ],
-                        );
-                      }
-                    })
-                  ],
-                ))));
+                          ),
+                          const SizedBox(height: 8),
+                          ticketDropdown,
+                          const SizedBox(height: 16),
+                          addButton,
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
