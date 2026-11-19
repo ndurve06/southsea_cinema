@@ -71,18 +71,18 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 color: cinemaBrand,
               ),
             ),
+            const SizedBox(height: 4),
+            Text(
+              booking.date,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 8),
             if (booking.items.isEmpty)
               Text('Summary: ${booking.summary}')
             else
               BookingItemsList(items: booking.items),
-            const SizedBox(height: 4),
-            Text(
-              'Date: ${booking.date}',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
             const SizedBox(height: 4),
             Text(
               'Total: £${booking.total.toStringAsFixed(2)}',

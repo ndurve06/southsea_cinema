@@ -40,12 +40,20 @@ void main() {
   testWidgets('Shows item rows for new bookings and summary for old bookings',
       (WidgetTester tester) async {
     await tester.runAsync(() async {
+      await CinemaDatabase.instance.insertBooking(
+        const Booking(
+          bookingNumber: 1003,
+          summary: '2 tickets - Despicable Me',
+          total: 16.0,
+          date: '01/02/2026 10:00',
+        ),
+      );
       await CinemaDatabase.instance.insertBookingWithItems(
         const Booking(
-          bookingNumber: 1002,
-          summary: '2 x Despicable Me',
-          total: 16.0,
-          date: '02/01/2026 11:00',
+          bookingNumber: 1004,
+          summary: '2 x Despicable Me, 1 x Shrek',
+          total: 28.0,
+          date: '02/02/2026 12:00',
         ),
         const <BookingItem>[
           BookingItem(
@@ -54,25 +62,36 @@ void main() {
             unitPrice: 6.0,
             quantity: 2,
           ),
+          BookingItem(
+            filmId: 'test-2',
+            filmName: 'Shrek',
+            unitPrice: 12.0,
+            quantity: 1,
+          ),
         ],
-      );
-      await CinemaDatabase.instance.insertBooking(
-        const Booking(
-          bookingNumber: 1001,
-          summary: '3 x Legacy Film',
-          total: 19.0,
-          date: '01/01/2026 10:00',
-        ),
       );
     });
 
     await tester.pumpWidget(const MaterialApp(home: BookingsScreen()));
     await pumpUntilLoaded(tester);
 
-    expect(find.text('2 x Despicable Me'), findsOneWidget);
-    expect(find.text('Unit price: £6.00'), findsOneWidget);
-    expect(find.text('Line total: £12.00'), findsOneWidget);
-    expect(find.text('Summary: 3 x Legacy Film'), findsOneWidget);
-    expect(find.text('Total: £16.00'), findsOneWidget);
+    expect(find.text('Booking #1004'), findsOneWidget);
+    expect(
+      find.text(
+        '2 x Despicable Me at Friday 25 December 2026 17:00 - '
+        'Unit price: £6.00 - Line total: £12.00',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        '1 x Shrek at Friday 25 December 2026 17:00 - '
+        'Unit price: £12.00 - Line total: £12.00',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Total: £28.00'), findsOneWidget);
+    expect(find.text('Summary: 2 tickets - Despicable Me'), findsOneWidget);
+    expect(find.text('02/02/2026 12:00'), findsOneWidget);
   });
 }

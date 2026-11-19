@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:southsea_cinema/models/booking_item.dart';
 
+const String _screeningDateTime = 'Friday 25 December 2026 17:00';
+
 class BookingItemsList extends StatelessWidget {
   final List<BookingItem> items;
 
@@ -17,16 +19,10 @@ class BookingItemsList extends StatelessWidget {
         for (final BookingItem item in items)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${item.quantity} x ${item.filmName}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text('Unit price: £${item.unitPrice.toStringAsFixed(2)}'),
-                Text('Line total: £${item.lineTotal.toStringAsFixed(2)}'),
-              ],
+            child: Text(
+              '${item.quantity} x ${item.filmName} at $_screeningDateTime - '
+              'Unit price: £${item.unitPrice.toStringAsFixed(2)} - '
+              'Line total: £${item.lineTotal.toStringAsFixed(2)}',
             ),
           ),
       ],

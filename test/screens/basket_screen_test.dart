@@ -133,9 +133,14 @@ void main() {
 
       await pumpBasket(tester);
 
-      expect(find.text('2 x Despicable Me'), findsOneWidget);
-      expect(find.text('Unit price: £6.00'), findsOneWidget);
-      expect(find.text('Line total: £12.00'), findsOneWidget);
+      expect(
+        find.text(
+          '2 x Despicable Me at Friday 25 December 2026 17:00 - '
+          'Unit price: £6.00 - Line total: £12.00',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('03/01/2026 12:00'), findsOneWidget);
     });
   });
 
@@ -183,6 +188,13 @@ void main() {
       expect(CartRepository.instance.getItems(), isEmpty);
       expect(find.text('Your basket is empty'), findsOneWidget);
       expect(find.text(confirmation), findsOneWidget);
+      expect(
+        find.text(
+          '2 x Despicable Me at Friday 25 December 2026 17:00 - '
+          'Unit price: £6.00 - Line total: £12.00',
+        ),
+        findsOneWidget,
+      );
 
       // The new booking appears below the basket.
       expect(find.text('Booking #$expectedNumber'), findsOneWidget);

@@ -235,11 +235,6 @@ class _BasketScreenState extends State<BasketScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            if (booking.items.isEmpty)
-              Text(booking.summary)
-            else
-              BookingItemsList(items: booking.items),
-            const SizedBox(height: 4),
             Text(
               booking.date,
               style: TextStyle(
@@ -247,6 +242,11 @@ class _BasketScreenState extends State<BasketScreen> {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
+            const SizedBox(height: 4),
+            if (booking.items.isEmpty)
+              Text(booking.summary)
+            else
+              BookingItemsList(items: booking.items),
           ],
         ),
       ),
